@@ -1,0 +1,95 @@
+from django.core.urlresolvers import reverse
+from django import template
+from django.conf import settings
+
+from templatetag_sugar.register import tag
+from templatetag_sugar.parser import Name, Variable, Constant, Optional, Model
+
+from feincms.module.page.models import Page, PageManager
+
+
+register = template.Library()
+
+
+def get_navigation(start_page=None, level=0, depth=1, language=None, navigation_type=None, extended=False):
+    if not start_page:
+        root = Page.objects
+        start_level = 0
+    else:
+        root = start_page.get_descendants()
+        start_level = start_page.level + 1
+    from_level = start_level + level
+    to_level = start_level + level + depth
+    queryset = root.filter(level__gte=from_level, level__lt=to_level, in_navigation=True)
+    if language:
+        queryset = queryset.filter(language=language)
+    if navigation_type:
+        queryset = queryset.filter(navigation_type=navigation_type)
+    queryset = PageManager.apply_active_filters(queryset)
+    return queryset
+
+
+@tag(register, [Optional([Constant("for"), Variable("start_page")]), 
+                Optional([Constant("for_level"), Variable("level")]), 
+                Optional([Constant("with_depth"), Variable("depth")]), 
+                Optional([Constant("for_language"), Variable("language")]), 
+                Optional([Constant("type"), Variable("navigation_type")]), 
+                Optional([Constant("extended"), Variable("extended")]), 
+                Optional([Constant("as"), Name('asvar')])
+                ])
+def extended_navigation(context, start_page=None, level=0, depth=1, language=None, navigation_type=None, extended=False, asvar=None):
+    if isinstance(start_page, basestring):
+        start_page = Page.objects.get(title=start_page)
+    entries = get_navigation(start_page=start_page, level=level, 
+                depth=depth, language=language, extended=extended, navigation_type=navigation_type)
+    if asvar:
+        context[asvar] = entries
+        return ""
+    else:
+        arr = []
+        arr.append('<ul>')
+        for page in entries:
+            arr.append('<li><a href="%s">%s</a></li>' % (page.get_absolute_url(), page.title))
+        arr.append('</ul>')
+        return '\n'.join(arr)
+
+
+@register.inclusion_tag("breadcrumbs.html")
+def breadcrumbs(page, include_self=True):
+    """
+    Generate a list of the page's ancestors suitable for use as breadcrumb navigation.
+
+    By default, generates an unordered list with the id "breadcrumbs" -
+    override breadcrumbs.html to change this.
+
+    {% feincms_breadcrumbs feincms_page %}
+    """
+
+    if not page or not isinstance(page, Page):
+        raise ValueError("feincms_breadcrumbs must be called with a valid Page object")
+
+    ancs = page.get_ancestors()
+
+    bc = [(anc.get_absolute_url(), anc.short_title()) for anc in ancs if anc.in_navigation]
+
+    if include_self:
+        bc.append((None, page.short_title()))
+
+    return {"trail": bc}
+    
+    
+@register.inclusion_tag('_language_links.html', takes_context=True)
+def language_links(context):
+    links = [list(t) for t in settings.LANGUAGES]
+    if 'language_links' in context:
+        for i, link in enumerate(links):
+            link.append(context['language_links'][i])
+    else:
+        page = context['feincms_page']
+        translations = dict((t.language, t) for t in page.available_translations())
+        for link in links:
+            if link[0] in translations:
+                link.append(translations[link[0]].get_absolute_url())
+            else:
+                link.append(reverse('custom.views.frontpage', args=(link[0], )))
+    return {'links': links, 'LANG': context['LANG']}

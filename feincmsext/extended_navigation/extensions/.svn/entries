@@ -1,0 +1,40 @@
+8
+
+dir
+4976
+http://site-express.biz/svn/svn_r/django/goingtotravel/custom/extensions
+http://site-express.biz/svn/svn_r
+
+
+
+2010-02-08T11:47:47.545851Z
+4785
+admin
+
+
+svn:special svn:externals svn:needs-lock
+
+__init__.py
+file
+
+
+
+
+2010-02-08T10:54:02.000000Z
+d41d8cd98f00b204e9800998ecf8427e
+2010-02-08T11:47:47.545851Z
+4785
+admin
+
+navigation_type.py
+file
+
+
+
+
+2010-02-08T11:33:03.000000Z
+4490baecc379f6bb22bb810d752df26d
+2010-02-08T11:47:47.545851Z
+4785
+admin
+

@@ -1,0 +1,52 @@
+8
+
+dir
+4976
+http://site-express.biz/svn/svn_r/django/goingtotravel/custom/templatetags
+http://site-express.biz/svn/svn_r
+
+
+
+2010-03-02T11:02:32.218323Z
+4946
+admin
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+42a3962b-1e48-ca49-a2d1-bcf698e10872
+
+__init__.py
+file
+
+
+
+
+2010-02-08T10:58:54.000000Z
+d41d8cd98f00b204e9800998ecf8427e
+2010-02-08T11:47:47.545851Z
+4785
+admin
+
+extended_navigation.py
+file
+
+
+
+
+2010-03-02T10:39:12.000000Z
+e887f3a9c1e7febec3015fe7395ea170
+2010-03-02T11:02:32.218323Z
+4946
+admin
+
