@@ -12,3 +12,5 @@ navigation_type_choices = getattr(settings, "NAVIGATION_TYPE_CHOICES", DEFAULT_N
 def register(cls, admin_cls):
     cls.add_to_class('navigation_type', models.CharField(_('navigation type'),
         max_length=32, choices=navigation_type_choices))
+
+    admin_cls.fieldsets[0][1]['fields'].extend(['navigation_type',])
