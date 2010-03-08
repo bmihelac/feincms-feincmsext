@@ -1,7 +1,7 @@
 Extensions for FeinCMS.
 =======================
 
-[FeinCMS](http://github.com/matthiask/feincms)
+Various tools and modules for [FeinCMS](http://github.com/matthiask/feincms).
 
 Example application is bundled.
 
