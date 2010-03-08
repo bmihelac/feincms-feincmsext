@@ -30,5 +30,10 @@ Menu structure file:
 	## Menu 2
 	### Menu 2.1
 
-./manage.py importstructure --delete_all ../menus.txt
-./manage.py importstructure --root 1 ../menus.txt
+This would delete ALL EXISTING PAGES and create structure ad is in file:
+
+	./manage.py importstructure --delete_all ../menus.txt
+	
+And this would add structure from the text file to page with id of 1:
+
+	./manage.py importstructure --root 1 ../menus.txt
