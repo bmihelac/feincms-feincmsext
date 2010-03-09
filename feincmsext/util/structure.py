@@ -18,7 +18,11 @@ def import_structure(f, root_id=None):
         if match:
             level = len(match.group(1))
             title = match.group(2) 
-            p = Page(active=True, title=title, slug=slugify(title), in_navigation=True, parent=parents[level-1])
+            parent = parents[level-1]
+            p = Page(active=True, title=title, slug=slugify(title), in_navigation=True, parent=parent)
+            for field in ('navigation_type',):
+                if parent and parent.__dict__.get(field, None):
+                    p.__dict__[field] = parent.__dict__[field]
             p.save()
             parents[level] = p
             print ('adding FeinCMS page: %s' % title)
