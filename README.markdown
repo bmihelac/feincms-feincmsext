@@ -11,7 +11,14 @@ extended_navigation
 Adds navigation_type fields to pages.
 Depending on the navigation_type, navigation can be splitted, in primary links, secondary links and so on.
 
-There is also extended_navigation template tag that uses mptt tree_info filter to render tree structure.
+Navigation types can be defined in settings
+
+	NAVIGATION_TYPE_CHOICES = (
+	    ('primary_links', _('primary links')),
+	    ('secondary_links', _('secondary links')),
+	)
+
+extended_navigation template tag, together with mptt tree_info template filter renders tree structure.
 
 extended_navigation uses and requires django-templatetag-sugar
 http://github.com/alex/django-templatetag-sugar
