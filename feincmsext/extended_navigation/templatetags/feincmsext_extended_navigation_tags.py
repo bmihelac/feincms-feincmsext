@@ -14,20 +14,21 @@ register = template.Library()
 def get_navigation(start_page=None, level=0, depth=1, language=None, navigation_type=None, extended=False):
     if not start_page:
         root = Page.objects
-        start_level = 0
     else:
-        root = start_page.get_descendants()
-        start_level = start_page.level + 1
-    from_level = start_level + level
-    to_level = start_level + level + depth
+        if start_page.is_root_node():
+            root_page = start_page
+        else:
+            root_page = start_page.get_ancestors().get(level=max(level-1, 0))
+        root = Page.objects.filter(lft__gte=root_page.lft, rght__lte=root_page.rght, tree_id=root_page.tree_id)
+    from_level = level
+    to_level = level + depth
     queryset = root.filter(level__gte=from_level, level__lt=to_level, in_navigation=True)
-    # import pdb; pdb.set_trace()
     if language:
         queryset = queryset.filter(language=language)
     if navigation_type:
         queryset = queryset.filter(navigation_type=navigation_type)
     queryset = PageManager.apply_active_filters(queryset)
-    entries = list (queryset)
+    entries = list(queryset)
     if extended:
         _entries = list(entries)
         entries = []

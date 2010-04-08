@@ -118,7 +118,7 @@
         <div id="sidebar">
             <h2>Primary links</h2>
 
-						{% extended_navigation level 1 depth 2 type "primary_links" extended 1 as navigation %}
+						{% extended_navigation for feincms_page level 1 depth 2 type "primary_links" extended 1 as navigation %}
 						{% for p, structure in navigation|tree_info %}
 							{% if structure.new_level %}<ul>{% else %}</li>{% endif %}
 							<li>
