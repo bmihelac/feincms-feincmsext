@@ -19,7 +19,8 @@ def import_structure(f, root_id=None):
             level = len(match.group(1))
             title = match.group(2) 
             parent = parents[level-1]
-            p = Page(active=True, title=title, slug=slugify(title), in_navigation=True, parent=Page.objects.get(pk=parent.pk))
+            parent_page = Page.objects.get(pk=parent.pk) if parent else None
+            p = Page(active=True, title=title, slug=slugify(title), in_navigation=True, parent=parent_page)
             for field in ('navigation_type',):
                 if parent and parent.__dict__.get(field, None):
                     p.__dict__[field] = parent.__dict__[field]
