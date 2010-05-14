@@ -27,7 +27,13 @@ def get_navigation(start_page=None, level=0, depth=1, language=None, navigation_
     if navigation_type:
         queryset = queryset.filter(navigation_type=navigation_type)
     queryset = PageManager.apply_active_filters(queryset)
-    entries = list (queryset)
+    entries = list(queryset)
+    if start_page and active_depth and (start_page.level >= level):
+        active_node = start_page if (start_page.level == level) else start_page.get_ancestors().get(level=level)
+        # handle case when start_page is not in navigation
+        if active_node in entries:
+            index = entries.index(active_node) + 1
+            entries[index:index] = active_node.children.filter(level__lte=level + active_depth)
     if extended:
         _entries = list(entries)
         entries = []
