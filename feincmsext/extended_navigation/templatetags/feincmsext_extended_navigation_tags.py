@@ -11,17 +11,20 @@ from feincms.module.page.models import Page, PageManager
 register = template.Library()
 
 
-def get_navigation(start_page=None, level=0, depth=1, language=None, navigation_type=None, extended=False):
+def get_navigation(start_page=None, level=0, depth=1, active_depth=0, language=None, navigation_type=None, extended=False):
     if not start_page:
         root = Page.objects
-        start_level = 0
     else:
-        root = start_page.get_descendants()
-        start_level = start_page.level + 1
-    from_level = start_level + level
-    to_level = start_level + level + depth
+        if (start_page.level < level - 1):
+            return []
+        if start_page.is_root_node() or (start_page.level == level-1):
+            root_page = start_page
+        else:
+            root_page = start_page.get_ancestors().get(level=max(level-1, 0))
+        root = Page.objects.filter(lft__gte=root_page.lft, rght__lte=root_page.rght, tree_id=root_page.tree_id)
+    from_level = level
+    to_level = level + depth
     queryset = root.filter(level__gte=from_level, level__lt=to_level, in_navigation=True)
-    # import pdb; pdb.set_trace()
     if language:
         queryset = queryset.filter(language=language)
     if navigation_type:
@@ -48,16 +51,18 @@ def get_navigation(start_page=None, level=0, depth=1, language=None, navigation_
 @tag(register, [Optional([Constant("for"), Variable("start_page")]), 
                 Optional([Constant("level"), Variable("level")]), 
                 Optional([Constant("depth"), Variable("depth")]), 
+                Optional([Constant("active_depth"), Variable("active_depth")]), 
                 Optional([Constant("language"), Variable("language")]), 
                 Optional([Constant("type"), Variable("navigation_type")]), 
                 Optional([Constant("extended"), Variable("extended")]), 
                 Optional([Constant("as"), Name('asvar')])
                 ])
-def extended_navigation(context, start_page=None, level=0, depth=1, language=None, navigation_type=None, extended=False, asvar=None):
+def extended_navigation(context, start_page=None, level=0, depth=1, active_depth=0, language=None, navigation_type=None, extended=False, asvar=None):
     if isinstance(start_page, basestring):
         start_page = Page.objects.get(title=start_page)
     entries = get_navigation(start_page=start_page, level=level, 
-                depth=depth, language=language, extended=extended, navigation_type=navigation_type)
+                depth=depth, active_depth=active_depth, language=language, 
+                extended=extended, navigation_type=navigation_type)
     if asvar:
         context[asvar] = entries
         return ""

@@ -72,6 +72,7 @@ INSTALLED_APPS = (
     'mptt',
     
     'feincmsext.extended_navigation',
+    'feincmsext.util',
 )
 
 LANGUAGES = (
