@@ -58,6 +58,9 @@
         min-height: 300px;
         padding: 0 0 0 10px;
     }
+		#sidebar a.selected {
+			font-weight:bold;
+		}
 
 		#secondary-links {
 			float: right;
@@ -122,7 +125,7 @@
 						{% for p, structure in navigation|tree_info %}
 							{% if structure.new_level %}<ul>{% else %}</li>{% endif %}
 							<li>
-							<a href="{{ p.get_absolute_url }}" {% if p|is_equal_or_parent_of:feincms_page %}class="selected"{% endif %}>{{ p.title }}</a>
+							<a href="{{ p.get_absolute_url }}" {% if p.get_absolute_url == request.META.PATH_INFO %}class="selected"{% endif %}>{{ p.title }}</a>
 							{% for level in structure.closed_levels %}</li></ul>{% endfor %}
 						{% endfor %}
 
