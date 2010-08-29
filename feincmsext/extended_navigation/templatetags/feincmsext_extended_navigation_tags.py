@@ -40,6 +40,11 @@ def get_navigation(start_page=None, level=0, depth=1, active_depth=0, language=N
     if extended:
         _entries = list(entries)
         entries = []
+        # add extended navigation from root_page
+        if getattr(root_page, 'navigation_extension', None):
+            entries.extend(root_page.extended_navigation(level=root_page.level + 1, tree_id=root_page.tree_id, 
+                            lft=0, rght=0))        
+        # and from all entries
         for entry in _entries:
             entries.append(entry)
             if getattr(entry, 'navigation_extension', None):
