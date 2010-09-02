@@ -49,7 +49,7 @@ def get_navigation(start_page=None, level=0, depth=1, active_depth=0, language=N
         for entry in _entries:
             entries.append(entry)
             if getattr(entry, 'navigation_extension', None):
-                extended_entries = [p for p in root_page.extended_navigation(level=root_page.level+1, 
+                extended_entries = [p for p in entry.extended_navigation(level=entry.level+1, 
                                     tree_id=root_page.tree_id, lft=0, rght=0) if p.level <= root_page.level+depth]
                 entries.extend(extended_entries)        
     return entries
