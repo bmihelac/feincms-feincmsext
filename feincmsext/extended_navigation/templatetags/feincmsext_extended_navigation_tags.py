@@ -7,6 +7,8 @@ from templatetag_sugar.parser import Name, Variable, Constant, Optional, Model
 
 from feincms.module.page.models import Page, PageManager
 
+from feincmsext.extended_navigation.util import regex_group_list
+
 
 register = template.Library()
 
@@ -96,3 +98,18 @@ def parent_feincms_page(context, start_page, level, asvar):
         return ""
     context[asvar] = start_page.get_ancestors()[level]
     return ""
+
+
+@tag(register, [Variable("contents"), 
+                Variable("expr"), 
+                Constant("as"), Name('asvar')
+                ])
+def group_page_content(context, contents, expr, asvar):
+    """
+    Allows grouping feincms page contents with regular expressions.
+    
+        {% group_page_content feincms_page.content.main "[richtext]{2}" as content_groups %}
+        
+    """
+    context[asvar] = regex_group_list(contents, expr, lambda x: x._meta.module_name)
+    return ''
