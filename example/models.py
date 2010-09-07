@@ -20,6 +20,14 @@ Page.register_templates({
         ('main', 'Main region'),
         ('sidebar', 'Sidebar', 'inherited'),
         ),
+    }, {
+    'key': 'group_contents',
+    'title': 'Group contents',
+    'path': 'group_contents.html',
+    'regions': (
+        ('main', 'Main region'),
+        ('sidebar', 'Sidebar', 'inherited'),
+        ),
     })
 Page.create_content_type(RawContent)
 MediaFileContent.default_create_content_type(Page)

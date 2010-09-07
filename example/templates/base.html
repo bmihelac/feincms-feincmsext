@@ -115,7 +115,9 @@
     <div id="wrapper">
         <div id="main">
             <h2>Main content</h2>
-            {% feincms_render_region feincms_page "main" request %}
+            {% block main %}
+              {% feincms_render_region feincms_page "main" request %}
+            {% endblock main %}
         </div>
 
         <div id="sidebar">
