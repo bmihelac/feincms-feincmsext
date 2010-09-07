@@ -1,7 +1,7 @@
 Extensions for FeinCMS.
 =======================
 
-Various tools and modules for [FeinCMS](http://github.com/matthiask/feincms).
+Various **experimental** tools and modules for [FeinCMS](http://github.com/matthiask/feincms).
 
 Example application is bundled.
 
@@ -22,6 +22,21 @@ extended_navigation template tag, together with mptt tree_info template filter r
 
 extended_navigation uses and requires django-templatetag-sugar
 http://github.com/alex/django-templatetag-sugar
+
+group_page_content
+------------------
+
+group_page_content templatetag allows more complex layouts by grouping page contents with regular expressions.
+
+For example:
+
+Wrap image content in div, but if it is followed by textcontent group them together under the same div:
+
+  {% group_page_content feincms_page.content.main "[imagecontent][rawcontent]?" as content_groups %}
+
+Group 2 successive text contents together in newsletter like columns:
+
+  {% group_page_content feincms_page.content.main "[rawcontent]{2}" as content_groups %}
 
 
 util
