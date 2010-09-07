@@ -4,10 +4,9 @@
 
 {% block main %}
   <h2>Regroup contents examples</h2>
-  <p>
+  <h4>
     Example 1: <em>image</em> elements are wrapped in DIV but if <em>raw content</em> follows <em>image</em> they are grouped together:
-  </p>
-  <hr />
+  </h4>
     {% group_page_content feincms_page.content.main "[imagecontent][rawcontent]?" as content_groups %}
     {% for group in content_groups %}
       {% if group.0 == -1 %}
@@ -17,35 +16,32 @@
       {% else %}
         <div style="border:2px solid #f00; background:#eee; margin:1em 0;">
           {% for content in group.1 %}
-            {% feincms_render_content content request %}
+            <div>{% feincms_render_content content request %}</div>
           {% endfor %}
         </div>
       {% endif %}
       
     {% endfor %}
-  <hr />
 
-  <p>
-    Example 2: Group 2 successive <em>raw contents</em> together.
-  </p>
-  <hr/>
+  <h4>
+    Example 2: Group 2 successive <em>raw contents</em> together in newsletter like columns.
+  </h4>
     {% group_page_content feincms_page.content.main "[rawcontent]{2}" as content_groups %}
     {% for group in content_groups %}
       {% if group.0 == -1 %}
         {% for content in group.1 %}
-          {% feincms_render_content content request %}
+          <div>{% feincms_render_content content request %}</div>
         {% endfor %}
       {% else %}
-        <div style="border:2px solid #f00; background:#eee; margin:1em 0;">
+        <div style="border:2px solid #f00; background:#eee; margin:1em 0; overflow:hidden;">
           {% for content in group.1 %}
-            {% feincms_render_content content request %}
+            <div style="float:left; width:200px; margin-right:20px; ">{% feincms_render_content content request %}</div>
           {% endfor %}
         </div>
       {% endif %}
     
     {% endfor %}
   
-  <hr/>
 
   
 {% endblock main %}
