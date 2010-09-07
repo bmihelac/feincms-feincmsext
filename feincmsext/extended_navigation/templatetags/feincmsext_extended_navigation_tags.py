@@ -82,5 +82,17 @@ def extended_navigation(context, start_page=None, level=0, depth=1, active_depth
         return '\n'.join(arr)
 
 
-
-    
+@tag(register, [Constant("for"), Variable("start_page"), 
+                Constant("level"), Variable("level"), 
+                Constant("as"), Name('asvar')
+                ])
+def parent_feincms_page(context, start_page, level, asvar):
+    """Get parent page for given level in tree hierarchy."""
+    if not start_page or start_page.level < level:
+        context[asvar] = None
+        return ""
+    if start_page.level == level:
+        context[asvar] = start_page
+        return ""
+    context[asvar] = start_page.get_ancestors()[level]
+    return ""
