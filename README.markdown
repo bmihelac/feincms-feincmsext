@@ -26,9 +26,7 @@ http://github.com/alex/django-templatetag-sugar
 group_page_content
 ------------------
 
-group_page_content templatetag allows more complex layouts by grouping page contents with regular expressions.
-
-For example:
+group_page_content templatetag allows more complex layouts by grouping page contents with regular expressions, here are some examples:
 
 Wrap image content in div, but if it is followed by textcontent group them together under the same div:
 
@@ -37,6 +35,8 @@ Wrap image content in div, but if it is followed by textcontent group them toget
 Group 2 successive text contents together in newsletter like columns:
 
   {% group_page_content feincms_page.content.main "[rawcontent]{2}" as content_groups %}
+  
+-![group_page_content screenshot](http://github.com/bmihelac/feincms-feincmsext/raw/master/example/media/regroup-content-example.jpg)
 
 
 util
