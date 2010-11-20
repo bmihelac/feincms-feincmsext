@@ -50,6 +50,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'feincmsext.simple_permission.backend.SimplePagePermissionBackend',
+)
+
 ROOT_URLCONF = 'example.urls'
 
 TEMPLATE_DIRS = (
@@ -73,6 +78,7 @@ INSTALLED_APPS = (
     
     'feincmsext.extended_navigation',
     'feincmsext.util',
+    'feincmsext.simple_permission',
 )
 
 LANGUAGES = (

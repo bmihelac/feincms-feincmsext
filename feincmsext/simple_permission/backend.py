@@ -1,9 +1,7 @@
-from django.contrib.contenttypes.models import ContentType
-
-from feincmsext.simple_permission.models import SimplePermission
+from feincmsext.simple_permission.models import PagePermission
 
 
-class SimplePermissionBackend(object):
+class SimplePagePermissionBackend(object):
     supports_object_permissions = True
     supports_anonymous_user = False
 
@@ -14,8 +12,6 @@ class SimplePermissionBackend(object):
         if obj is None:
             return False
 
-        ct = ContentType.objects.get_for_model(obj)
-
         try:
             perm = perm.split('.')[-1].split('_')[0]
         except IndexError:
@@ -24,12 +20,11 @@ class SimplePermissionBackend(object):
         all_parents = list(obj.get_ancestors(True))
         if perm != 'delete':
             all_parents.insert(0, obj)
-        all_parents_ids = [o.id for o in all_parents]
-        permissions = SimplePermission.objects.filter(content_type=ct,
-                                           object_id__in=all_parents_ids,
-                                           user=user_obj)
-        for object_id in all_parents_ids:
+
+        permissions = PagePermission.objects.filter(page__in=all_parents,
+                                                    user=user_obj)
+        for page in all_parents:
             for p in permissions:
-                if p.object_id == object_id:
+                if p.page == page:
                     return p.can(perm)
 

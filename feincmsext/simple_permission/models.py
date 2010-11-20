@@ -1,27 +1,38 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
+from feincms.module.page.models import Page
+
 
 PERMISSION_CHOICES = (
         ('none', _('none')),
-        ('change', _('change items in subtree')),
-        ('all', _('change subtree, add and remove items'))
+        ('change', _('edit subtree')),
+        ('all', _('edit, add and remove subtree items'))
         )
-class SimplePermission(models.Model):
-    user = models.ForeignKey(User)
-    permission = models.CharField(max_length=12, blank=False, choices=PERMISSION_CHOICES)
-    can_change = models.BooleanField()
-    can_add_delete = models.BooleanField()
 
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
+class SimplePermissionBase(models.Model):
+    user = models.ForeignKey(User, verbose_name=_('User'))
+    permission = models.CharField(max_length=12, blank=False, 
+            choices=PERMISSION_CHOICES,
+            verbose_name=_('Permission'))
+
+    class Meta:
+        abstract=True
 
     def can(self, action):
         if self.permission == 'none':
             return False
-        if action in ('delete', 'add'):
+        if action in ('delete', 'addchild'):
             allowed = (self.permission == 'all')
-        else:
+        elif action == 'change':
             allowed = True
         return allowed
+
+
+class PagePermission(SimplePermissionBase):
+    page = models.ForeignKey(Page)
+
+    class Meta:
+        verbose_name = _("Page Permission")
+        verbose_name_plural = _("Page Permissions")
+

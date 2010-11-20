@@ -60,8 +60,9 @@ And this would add structure from the text file to page with id of 1:
 
 	./manage.py importstructure --root 1 menus.txt
 
-page permissions
-----------------
+simple permissions
+------------------
 
-* can edit
-* can manage subtree
+* none - user cannot do anything
+* change - user can change defined page and all childrent pages
+* all - user can change all pages in subtree, add new pages or delete existing except selected page

@@ -1,18 +1,17 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
-from django.contrib.contenttypes.models import ContentType
 
 from feincms.module.page.models import Page
 
-from feincmsext.simple_permission.models import SimplePermission
+from feincmsext.simple_permission.models import PagePermission
 
 
-class SimplePermissionBackendTest(TestCase):
+class PagePermissionBackendTest(TestCase):
     """
     Tests for auth backend that supports object level permissions
     """
-    backend = 'feincmsext.simple_permission.backend.SimplePermissionBackend'
+    backend = 'feincmsext.simple_permission.backend.SimplePagePermissionBackend'
 
     def setUp(self):
         self.curr_auth = settings.AUTHENTICATION_BACKENDS
@@ -33,21 +32,22 @@ class SimplePermissionBackendTest(TestCase):
         settings.AUTHENTICATION_BACKENDS = self.curr_auth
 
     def add_permission(self, user, page, permission):
-        SimplePermission.objects.create(user=user, 
+        PagePermission.objects.create(user=user, 
                 permission=permission,
-                content_type=ContentType.objects.get_for_model(Page),
-                object_id=page.id)
+                page=page)
 
     def test_has_perm(self):
         self.add_permission(self.user1, self.page_1, 'change')
         self.assertEqual(self.user1.has_perm('page.change_page', self.page_1), True)
         self.assertEqual(self.user1.has_perm('page.change_page', self.page_1_1), True)
         self.assertEqual(self.user1.has_perm('page.change_page', self.page_1_1_1), True)
-        #self.assertEqual(self.user1.has_perm('page.delete_page', self.page_1_1_1), False)
+        self.assertEqual(self.user1.has_perm('page.delete_page', self.page_1_1_1), False)
+        self.assertEqual(self.user1.has_perm('page.addchild_page', self.page_1_1_1), False)
         self.assertEqual(self.user2.has_perm('page.change_page', self.page_1), False)
 
         self.add_permission(self.user2, self.page_1_1, 'all')
         self.assertEqual(self.user2.has_perm('page.change_page', self.page_1), False)
         self.assertEqual(self.user2.has_perm('page.change_page', self.page_1_1), True)
-        #self.assertEqual(self.user2.has_perm('page.delete_page', self.page_1_1), False)
+        self.assertEqual(self.user2.has_perm('page.delete_page', self.page_1_1), False)
         self.assertEqual(self.user2.has_perm('page.delete_page', self.page_1_1_1), True)
+        self.assertEqual(self.user2.has_perm('page.addchild_page', self.page_1_1_1), True)
