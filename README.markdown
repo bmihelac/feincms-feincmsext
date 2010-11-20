@@ -59,3 +59,9 @@ This would delete ALL EXISTING PAGES and create structure from file:
 And this would add structure from the text file to page with id of 1:
 
 	./manage.py importstructure --root 1 menus.txt
+
+page permissions
+----------------
+
+* can edit
+* can manage subtree
