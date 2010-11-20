@@ -3,7 +3,7 @@ Extensions for FeinCMS.
 
 Various **experimental** tools and modules for [FeinCMS](http://github.com/matthiask/feincms).
 
-Example application is bundled.
+Example application is bundled (run ./setup_symlinks.py inside example folder to symlink FeinCMS media files.
 
 extended_navigation
 -------------------
