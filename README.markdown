@@ -76,4 +76,8 @@ To add simple permission, add 'feincmsext.simple_permission' to INSTALLED_APPS a
         'feincmsext.simple_permission.backend.SimplePagePermissionBackend',
     )
 
+Notes:
+* Delete selected pages action does not check permissions (it uses QuerySet.delete())
+* Add child page link is always displayed regardless if page can be added or not
+
 simple permissions are implemented in example app for user1 (pass)
