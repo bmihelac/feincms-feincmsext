@@ -31,6 +31,19 @@ class ObjectPermissionMixin(object):
 
 
 class PageAdmin(ObjectPermissionMixin, OldPageAdmin):
+    def queryset(self, request):
+        """
+        Return queryset without objects that user does not have 'change' permission.
+        """
+        qs = super(PageAdmin, self).queryset(request)
+        opts = self.opts
+        perm = opts.app_label + '.' + opts.get_change_permission()
+        forbidden = [obj.id for obj in qs if not request.user.has_perm(perm, obj)]
+        qs = qs.exclude(id__in=forbidden)
+        print qs
+        return qs
+
+    # dont display link to add child page
     pass
 
 admin.site.unregister(Page)
