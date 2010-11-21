@@ -20,7 +20,7 @@ class PagePermissionAdmin(admin.ModelAdmin):
 class ObjectPermissionMixin(object):
     def has_add_child_permission(self, request, obj):
         opts = self.opts
-        return request.user.has_perm(opts.app_label + '.' + opts.get_add_permission())
+        return request.user.has_perm(opts.app_label + '.addchild_page', obj)
 
     def has_change_permission(self, request, obj=None):
         opts = self.opts
