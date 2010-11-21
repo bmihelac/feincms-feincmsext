@@ -40,7 +40,6 @@ class PageAdmin(ObjectPermissionMixin, OldPageAdmin):
         perm = opts.app_label + '.' + opts.get_change_permission()
         forbidden = [obj.id for obj in qs if not request.user.has_perm(perm, obj)]
         qs = qs.exclude(id__in=forbidden)
-        print qs
         return qs
 
     # dont display link to add child page
