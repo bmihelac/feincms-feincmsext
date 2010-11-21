@@ -62,7 +62,7 @@ class ObjectPermissionMixin(object):
 
 
 class PageAdmin(ObjectPermissionMixin, OldPageAdmin):
-    pass
+    actions = None
 
 admin.site.unregister(Page)
 admin.site.register(Page, PageAdmin)
