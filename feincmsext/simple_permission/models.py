@@ -15,7 +15,7 @@ class SimplePermissionBase(models.Model):
     permission = models.CharField(max_length=12, blank=False, 
             choices=PERMISSION_CHOICES,
             verbose_name=_('Permission'))
-
+    
     class Meta:
         abstract=True
 
@@ -31,6 +31,9 @@ class SimplePermissionBase(models.Model):
 
 class PagePermission(SimplePermissionBase):
     page = models.ForeignKey(Page)
+
+    def __unicode__(self):
+        return '%s: %s - %s' % (self.user.username, self.permission, self.page)
 
     class Meta:
         verbose_name = _("Page Permission")
