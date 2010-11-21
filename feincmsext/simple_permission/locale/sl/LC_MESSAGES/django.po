@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-21 12:33+0100\n"
-"PO-Revision-Date: 2010-11-21 12:35\n"
+"PO-Revision-Date: 2010-11-21 12:37\n"
 "Last-Translator: <bmihelac@mihelac.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "brez dovoljenja"
 
 #: models.py:9
 msgid "edit subtree"
-msgstr "urejanje strani znotraj strukturi"
+msgstr "urejanje strani znotraj strukture"
 
 #: models.py:10
 msgid "edit, add and remove subtree items"
