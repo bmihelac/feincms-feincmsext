@@ -63,6 +63,17 @@ And this would add structure from the text file to page with id of 1:
 simple permissions
 ------------------
 
+For any page, following permissions can be set.
+
 * none - user cannot do anything
-* change - user can change defined page and all childrent pages
-* all - user can change all pages in subtree, add new pages or delete existing except selected page
+* change - user can edit selected page and all childrent pages
+* all - user can edit all pages in subtree, add new pages or delete them. User cannot remove selected page.
+
+To add simple permission, add 'feincmsext.simple_permission' to INSTALLED_APPS and update AUTHENTICATION_BACKENDS with:
+
+    AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.ModelBackend',
+        'feincmsext.simple_permission.backend.SimplePagePermissionBackend',
+    )
+
+simple permissions are implemented in example app for user1 (pass)
