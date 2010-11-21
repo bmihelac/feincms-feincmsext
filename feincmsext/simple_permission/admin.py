@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.exceptions import PermissionDenied
 
 from mptt.forms import TreeNodeChoiceField
 from feincms.module.page.models import Page, PageAdmin as OldPageAdmin
@@ -29,20 +30,38 @@ class ObjectPermissionMixin(object):
         opts = self.opts
         return request.user.has_perm(opts.app_label + '.' + opts.get_delete_permission(), obj)
 
-
-class PageAdmin(ObjectPermissionMixin, OldPageAdmin):
     def queryset(self, request):
         """
         Return queryset without objects that user does not have 'change' permission.
         """
-        qs = super(PageAdmin, self).queryset(request)
+        qs = super(ObjectPermissionMixin, self).queryset(request)
         opts = self.opts
         perm = opts.app_label + '.' + opts.get_change_permission()
         forbidden = [obj.id for obj in qs if not request.user.has_perm(perm, obj)]
         qs = qs.exclude(id__in=forbidden)
         return qs
 
-    # dont display link to add child page
+    def _actions_column(self, page):
+        """
+        see #13659 http://code.djangoproject.com/ticket/13659
+        When this patch is applied we could check if user is allowed to 
+        add child pages and show/hide link in respect to this.
+        """
+        actions = super(ObjectPermissionMixin, self)._actions_column(page)
+        #request = None
+        #if self.has_add_child_permission(request, page):
+        #    actions.pop(1)
+        return actions
+
+    def save_model(self, request, obj, form, change):
+        if not request.user.is_superuser and not obj.pk:
+            if not obj.parent or not self.has_add_child_permission(request, obj.parent):
+                raise PermissionDenied
+        obj.save()
+
+
+
+class PageAdmin(ObjectPermissionMixin, OldPageAdmin):
     pass
 
 admin.site.unregister(Page)
