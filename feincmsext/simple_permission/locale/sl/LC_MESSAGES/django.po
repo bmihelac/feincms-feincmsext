@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-11-21 12:33+0100\n"
+"PO-Revision-Date: 2010-11-21 12:35\n"
+"Last-Translator: <bmihelac@mihelac.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.5.6\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+
+#: models.py:8
+msgid "none"
+msgstr "brez dovoljenja"
+
+#: models.py:9
+msgid "edit subtree"
+msgstr "urejanje strani znotraj strukturi"
+
+#: models.py:10
+msgid "edit, add and remove subtree items"
+msgstr "urejanje, dodajanje in odstranjevanje strani znotraj strukture"
+
+#: models.py:14
+msgid "User"
+msgstr "Uporabnik"
+
+#: models.py:17
+msgid "Permission"
+msgstr "Dovoljenje"
+
+#: models.py:39
+msgid "Page Permission"
+msgstr "Dovoljenje za strani"
+
+#: models.py:40
+msgid "Page Permissions"
+msgstr "Dovoljenja za strani"
