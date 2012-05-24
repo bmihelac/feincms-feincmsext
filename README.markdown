@@ -96,13 +96,13 @@ Content type configuration is list or tuple with following elements:
 * region - region (optional, can be list)
 * options - dictionary to pass as options (optional)
 
->>> content_types = [
-        (RichTextContent, ), # all regions
-        (
-            ('feincms.content.video.models', MediaFileContent), # multiple content types
-            ('main', 'sidebar'), # multiple regions
-            {'TYPE_CHOICES': (('block', 'block'),), # options
-        )
-        ]
->>> create_content_type(Page, content_types)
+    >>> content_types = [
+            (RichTextContent, ), # all regions
+            (
+                ('feincms.content.video.models', MediaFileContent), # multiple content types
+                ('main', 'sidebar'), # multiple regions
+                {'TYPE_CHOICES': (('block', 'block'),), # options
+            )
+            ]
+    >>> create_content_type(Page, content_types)
 
