@@ -53,6 +53,8 @@ def regex_group_list(orig_lst, expr, get_type_func=None):
     if not get_type_func:
         get_type_func = lambda x: x
     mapping, regex_lst = compile_expr(expr)
+    # transform orig_lst items to one char, giving 1st expression 'A',
+    # 2nd 'B' and so on. If orig_lst item has no mapping mark it with '9'
     s = ''.join([mapping.get(get_type_func(e), '9') for e in orig_lst])
     groups = {}
     for i, regex in enumerate(regex_lst):
