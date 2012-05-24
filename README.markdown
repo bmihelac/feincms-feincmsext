@@ -81,3 +81,28 @@ Notes:
 * Add child page link is always displayed regardless if page can be added or not
 
 simple permissions are implemented in example app for user1 (pass)
+
+create_content_types
+--------------------
+
+Create content types for given ``content_types_conf``.
+
+``content_types_conf`` is a list or tuple, each element should have
+content type configuration. 
+
+Content type configuration is list or tuple with following elements:
+
+* content_type - class path or model (can be list)
+* region - region (optional, can be list)
+* options - dictionary to pass as options (optional)
+
+>>> content_types = [
+        (RichTextContent, ), # all regions
+        (
+            ('feincms.content.video.models', MediaFileContent), # multiple content types
+            ('main', 'sidebar'), # multiple regions
+            {'TYPE_CHOICES': (('block', 'block'),), # options
+        )
+        ]
+>>> create_content_type(Page, content_types)
+
