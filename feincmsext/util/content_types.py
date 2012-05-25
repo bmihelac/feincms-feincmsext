@@ -36,11 +36,11 @@ def create_content_types(cls, content_types_conf):
     >>> create_content_type(Page, content_types)
     """
     for conf in content_types_conf:
-        content_types = conf[0]
+        content_types, regions, kwargs = (conf + (None, None))[:3]
+        if not kwargs:
+            kwargs = {}
         if not isinstance(content_types, (list, tuple,)):
             content_types = (content_types,)
-        regions = conf[1] if len(conf) == 2 else None
-        kwargs = conf[2] if len(conf) == 3 else {}
         if regions:
             kwargs['regions'] = regions
         for content_type in content_types:
