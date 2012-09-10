@@ -4,6 +4,7 @@ from templatetag_sugar.register import tag
 from templatetag_sugar.parser import Name, Variable, Constant, Optional
 
 from feincms.module.page.models import Page, PageManager
+from feincms.module.page.extensions.navigation import PagePretender
 
 from feincmsext.extended_navigation.util import regex_group_list
 
@@ -136,3 +137,23 @@ def group_page_content(context, contents, expr, asvar):
             expr,
             lambda x: x._meta.module_name)
     return ''
+
+
+@register.assignment_tag
+def is_equal_or_parent_or_pretender(page1, page2, request):
+    """
+    Determines whether a given page is equal to or the parent of another
+    page.
+
+    If ``page1`` is ``Page`` object, compare mptt tree (this is same as
+    FeinCMS ``is_equal_or_parent_of`` filter functionality).
+
+    However, if ``page1`` is PagePretender, return if `page1` is contained in
+    current url.
+    """
+    if not isinstance(page1, PagePretender):
+        return (page1.tree_id == page2.tree_id
+                and page1.lft <= page2.lft
+                and page1.rght >= page2.rght)
+    url = request.META['PATH_INFO']
+    return page1.get_absolute_url() in url
