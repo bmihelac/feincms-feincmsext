@@ -52,6 +52,15 @@ Separate multiple groups with a slash ``/``:
     {% group_page_content feincms_page.content.main "[imagecontent][rawcontent]? / [rawcontent][imagecontent]?" as content_groups %}
 
 
+is_equal_or_parent_or_pretender tag
+-----------------------------------
+
+Use this tag instead of ``is_equal_or_parent_of`` filter add *current* class
+to HTMl navigation if you use navigation extensions, and structure can be
+guessed from URL scheme.
+
+TODO: add example
+
 util
 ----
 
