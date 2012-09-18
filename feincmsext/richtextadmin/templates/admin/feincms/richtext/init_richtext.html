@@ -1,0 +1,9 @@
+{% extends richtext_template_base %}
+
+{% block enable %}
+  $(function() {
+    $('textarea.item-richtext').each(function(){
+      tinymce.execCommand('mceAddControl', false, this.id)
+    });
+  });
+{% endblock %}
