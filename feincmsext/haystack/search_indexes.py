@@ -12,6 +12,9 @@ class PageIndex(indexes.SearchIndex):
     name = indexes.CharField(model_attr='title', boost=1.2)
     content_auto = indexes.EdgeNgramField(model_attr='title')
     url = indexes.CharField(model_attr="_cached_url")
+    #NOTE: ImproperlyConfigured: Error importing template source loader
+    #django.template.loaders.app_directories.Loader:
+    #"'module' object has no attribute 'Loader'"
     try:
         Page._meta.get_field_by_name('language')
         language = indexes.CharField(model_attr='language')
