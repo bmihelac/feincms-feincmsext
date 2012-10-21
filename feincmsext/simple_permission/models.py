@@ -30,7 +30,7 @@ class SimplePermissionBase(models.Model):
 
 
 class PagePermission(SimplePermissionBase):
-    page = models.ForeignKey(Page)
+    page = models.ForeignKey(Page, verbose_name=_('Page'))
 
     def __unicode__(self):
         return '%s: %s - %s' % (self.user.username, self.permission, self.page)

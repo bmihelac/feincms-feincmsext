@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import ugettext_lazy as _
 
 from mptt.forms import TreeNodeChoiceField
 from feincms.module.page.models import Page, PageAdmin as OldPageAdmin
@@ -13,7 +14,7 @@ class PagePermissionAdmin(admin.ModelAdmin):
 
     def formfield_for_dbfield(self, db_field, **kwargs): 
         if db_field.attname == 'page_id': 
-            return TreeNodeChoiceField(queryset = Page.tree.all(), empty_label = "---------")
+            return TreeNodeChoiceField(queryset = Page.tree.all(), empty_label = "---------", label=_('Page'))
         return super(PagePermissionAdmin, self).formfield_for_dbfield(db_field, **kwargs)    
 
 
