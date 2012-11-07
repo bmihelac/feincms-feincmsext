@@ -33,16 +33,16 @@ class ObjectPermissionMixin(object):
         opts = self.opts
         return request.user.has_perm(opts.app_label + '.' + opts.get_delete_permission(), obj)
 
-    def queryset(self, request):
-        """
-        Return queryset without objects that user does not have 'change' permission.
-        """
-        qs = super(ObjectPermissionMixin, self).queryset(request)
-        opts = self.opts
-        perm = opts.app_label + '.' + opts.get_change_permission()
-        forbidden = [obj.id for obj in qs if not request.user.has_perm(perm, obj)]
-        qs = qs.exclude(id__in=forbidden)
-        return qs
+    #def queryset(self, request):
+        #"""
+        #Return queryset without objects that user does not have 'change' permission.
+        #"""
+        #qs = super(ObjectPermissionMixin, self).queryset(request)
+        #opts = self.opts
+        #perm = opts.app_label + '.' + opts.get_change_permission()
+        #forbidden = [obj.id for obj in qs if not request.user.has_perm(perm, obj)]
+        #qs = qs.exclude(id__in=forbidden)
+        #return qs
 
     def _actions_column(self, page):
         """
