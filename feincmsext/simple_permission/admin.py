@@ -12,10 +12,12 @@ class PagePermissionAdmin(admin.ModelAdmin):
     list_display = ('user', 'page', 'permission')
     list_filter = ('user', 'page')
 
-    def formfield_for_dbfield(self, db_field, **kwargs): 
-        if db_field.attname == 'page_id': 
-            return TreeNodeChoiceField(queryset = Page.objects.all(), empty_label = "---------", label=_('Page'))
-        return super(PagePermissionAdmin, self).formfield_for_dbfield(db_field, **kwargs)    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.attname == 'page_id':
+            return TreeNodeChoiceField(queryset=Page.objects.all(),
+                    empty_label="---------", label=_('Page'))
+        return super(PagePermissionAdmin,
+                self).formfield_for_dbfield(db_field, **kwargs)
 
 
 class ObjectPermissionMixin(object):
