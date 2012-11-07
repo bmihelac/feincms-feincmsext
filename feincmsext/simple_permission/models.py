@@ -26,6 +26,8 @@ class SimplePermissionBase(models.Model):
             allowed = (self.permission == 'all')
         elif action == 'change':
             allowed = True
+        else:
+            allowed = False
         return allowed
 
 
