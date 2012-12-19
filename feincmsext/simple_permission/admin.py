@@ -21,17 +21,45 @@ class PagePermissionAdmin(admin.ModelAdmin):
 
 
 class ObjectPermissionMixin(object):
+
+    def is_page_permission_defined(self, request):
+        """
+        Returns if page permissions are defined for current user.
+        """
+        if PagePermission.objects.filter(user=request.user):
+            return True
+        return False
+
     def has_add_child_permission(self, request, obj):
-        opts = self.opts
-        return request.user.has_perm(opts.app_label + '.addchild_page', obj)
+        """
+        `Add child` permission is checked only when user is defined in
+        PagePermission model, otherwise global permissions are applied.
+        """
+        perm = self.opts.app_label + '.addchild_page'
+        if not self.is_page_permission_defined(request):
+            return request.user.has_perm(perm)
+        return request.user.has_perm(perm, obj)
 
     def has_change_permission(self, request, obj=None):
-        opts = self.opts
-        return request.user.has_perm(opts.app_label + '.' + opts.get_change_permission(), obj)
+        """
+        `Change` permission is checked only when user is defined in
+        PagePermission model, otherwise global permissions are applied.
+        """
+        perm = self.opts.app_label + '.' + self.opts.get_change_permission()
+        if not self.is_page_permission_defined(request):
+            perm = super(ObjectPermissionMixin, self)
+            return request.user.has_perm(perm)
+        return request.user.has_perm(perm, obj)
 
     def has_delete_permission(self, request, obj=None):
-        opts = self.opts
-        return request.user.has_perm(opts.app_label + '.' + opts.get_delete_permission(), obj)
+        """
+        `Delete` permission is checked only when user is defined in
+        PagePermission model, otherwise global permissions are applied.
+        """
+        perm = self.opts.app_label + '.' + self.opts.get_delete_permission()
+        if not self.is_page_permission_defined(request):
+            return request.user.has_perm(perm)
+        return request.user.has_perm(perm, obj)
 
     #def queryset(self, request):
         #"""
