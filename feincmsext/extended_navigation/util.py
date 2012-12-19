@@ -1,5 +1,41 @@
 import re
 
+
+def compile_expr(expr):
+    """
+    Compile expression ``expr``.
+
+    Returns tuple of:
+
+    * mapping
+    * regex_lst
+    * group_names
+
+    >>> expr = "[image][caption]? / [section]{2}"
+    >>> compile_expr(expr)
+    ({'caption': 'B', 'image': 'A', 'section': 'C'}, ['[A][B]?', '[C]{2}'], [0, 1])
+    """
+    mapping = {} 
+    regex_lst, group_names = [], []
+    for index, s in enumerate(expr.split('/')):
+        match = re.match(r'\<([^>]+)\>', s)
+        if match:
+            group_name = match.groups()[0]
+            s = s.replace(match.group(), '')
+        else:
+            group_name = index
+        for r in re.findall('\[\w+\]', s):
+            name = r[1:-1]
+            if name not in mapping.keys():
+                char = chr(65 + len(mapping))
+                mapping[name] = char
+            else:
+                char = mapping[name]
+            s = s.replace(name, char)
+        regex_lst.append(s.replace(' ', ''))
+        group_names.append(group_name)
+    return mapping, regex_lst, group_names
+    
 def regex_group_list(orig_lst, expr, get_type_func=None):
     """
     Group list items in `orig_lst` by expression `expr`.
@@ -33,34 +69,25 @@ def regex_group_list(orig_lst, expr, get_type_func=None):
     >>> expr = "[start].*[end]" # group all between start and end
     >>> regex_group_list(lst, expr)
     [(-1, ['A']), (0, ['start', 'B', 'C', 'end']), (-1, ['D'])]
+
+    >>> lst = ['gif', 'jpg', 'txt', 'tiff', 'gif']
+    >>> expr = "<images>([gif]|[jpg]|[tiff])+" # named groups
+    >>> regex_group_list(lst, expr)
+    [('images', ['gif', 'jpg']), (-1, ['txt']), ('images', ['tiff', 'gif'])]
     """
-    
-    def compile_expr(expr):
-        mapping = {} 
-        regex_lst = []
-        for s in expr.split('/'):
-            for r in re.findall('\[\w+\]', s):
-                name = r[1:-1]
-                if name not in mapping.keys():
-                    char = chr(65 + len(mapping))
-                    mapping[name] = char
-                else:
-                    char = mapping[name]
-                s = s.replace(name, char)
-            regex_lst.append(s.replace(' ', ''))
-        return mapping, regex_lst    
     
     if not get_type_func:
         get_type_func = lambda x: x
-    mapping, regex_lst = compile_expr(expr)
+    mapping, regex_lst, group_names = compile_expr(expr)
+
     # transform orig_lst items to one char, giving 1st expression 'A',
     # 2nd 'B' and so on. If orig_lst item has no mapping mark it with '9'
     s = ''.join([mapping.get(get_type_func(e), '9') for e in orig_lst])
     groups = {}
-    for i, regex in enumerate(regex_lst):
+    for regex, group_name in zip(regex_lst, group_names):
         for result in re.finditer(regex, s):
             start, end = result.start(), result.end()
-            groups[start] = (i, orig_lst[start:end])
+            groups[start] = (group_name, orig_lst[start:end])
             s = s[:start] + '0'*(end-start) + s[end:]
     for result in re.finditer('[^0]+', s):
         start, end = result.start(), result.end()

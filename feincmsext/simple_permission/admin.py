@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import ugettext_lazy as _
 
 from mptt.forms import TreeNodeChoiceField
 from feincms.module.page.models import Page, PageAdmin as OldPageAdmin
@@ -11,10 +12,12 @@ class PagePermissionAdmin(admin.ModelAdmin):
     list_display = ('user', 'page', 'permission')
     list_filter = ('user', 'page')
 
-    def formfield_for_dbfield(self, db_field, **kwargs): 
-        if db_field.attname == 'page_id': 
-            return TreeNodeChoiceField(queryset = Page.tree.all(), empty_label = "---------")
-        return super(PagePermissionAdmin, self).formfield_for_dbfield(db_field, **kwargs)    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.attname == 'page_id':
+            return TreeNodeChoiceField(queryset=Page.objects.all(),
+                    empty_label="---------", label=_('Page'))
+        return super(PagePermissionAdmin,
+                self).formfield_for_dbfield(db_field, **kwargs)
 
 
 class ObjectPermissionMixin(object):
@@ -30,16 +33,16 @@ class ObjectPermissionMixin(object):
         opts = self.opts
         return request.user.has_perm(opts.app_label + '.' + opts.get_delete_permission(), obj)
 
-    def queryset(self, request):
-        """
-        Return queryset without objects that user does not have 'change' permission.
-        """
-        qs = super(ObjectPermissionMixin, self).queryset(request)
-        opts = self.opts
-        perm = opts.app_label + '.' + opts.get_change_permission()
-        forbidden = [obj.id for obj in qs if not request.user.has_perm(perm, obj)]
-        qs = qs.exclude(id__in=forbidden)
-        return qs
+    #def queryset(self, request):
+        #"""
+        #Return queryset without objects that user does not have 'change' permission.
+        #"""
+        #qs = super(ObjectPermissionMixin, self).queryset(request)
+        #opts = self.opts
+        #perm = opts.app_label + '.' + opts.get_change_permission()
+        #forbidden = [obj.id for obj in qs if not request.user.has_perm(perm, obj)]
+        #qs = qs.exclude(id__in=forbidden)
+        #return qs
 
     def _actions_column(self, page):
         """

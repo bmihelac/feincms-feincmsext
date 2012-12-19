@@ -1,0 +1,5 @@
+{% load search_helper_tags %}
+{{ object.title }}
+{{ object.meta_description }}
+{{ object.meta_keywords }}
+{{ object|page_search_result }}
