@@ -4,6 +4,7 @@ from feincmsext.simple_permission.models import PagePermission
 class SimplePagePermissionBackend(object):
     supports_object_permissions = True
     supports_anonymous_user = False
+    supports_inactive_user = False
 
     def authenticate(self, username, password):
         return None
@@ -27,4 +28,3 @@ class SimplePagePermissionBackend(object):
             for p in permissions:
                 if p.page == page:
                     return p.can(perm)
-
