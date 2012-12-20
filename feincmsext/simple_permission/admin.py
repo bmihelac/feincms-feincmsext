@@ -84,7 +84,8 @@ class ObjectPermissionMixin(object):
         return actions
 
     def save_model(self, request, obj, form, change):
-        if not request.user.is_superuser and not obj.pk:
+        if not (request.user.is_superuser or
+                not self.is_page_permission_defined(request)) and not obj.pk:
             if not obj.parent or not self.has_add_child_permission(request, obj.parent):
                 raise PermissionDenied
         obj.save()
