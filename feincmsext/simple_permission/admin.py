@@ -47,7 +47,6 @@ class ObjectPermissionMixin(object):
         """
         perm = self.opts.app_label + '.' + self.opts.get_change_permission()
         if not self.is_page_permission_defined(request):
-            perm = super(ObjectPermissionMixin, self)
             return request.user.has_perm(perm)
         return request.user.has_perm(perm, obj)
 
