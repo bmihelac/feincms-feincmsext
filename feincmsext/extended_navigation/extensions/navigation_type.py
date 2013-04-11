@@ -13,4 +13,7 @@ def register(cls, admin_cls):
     cls.add_to_class('navigation_type', models.CharField(_('navigation type'),
         max_length=32, choices=navigation_type_choices, default=navigation_type_choices[0][0]))
 
-    admin_cls.fieldsets[0][1]['fields'].extend(['navigation_type',])
+    if hasattr(admin_cls, 'add_extension_options'):
+        admin_cls.add_extension_options('navigation_type')
+    else:
+        admin_cls.fieldsets[0][1]['fields'].extend(['navigation_type',])
