@@ -4,4 +4,5 @@ Contributors
 
 * bmihelac (Bojan Mihelac)
 * Gwildor (Gwildor Sok)
+* ludwinas (Laura Chimera)
 
