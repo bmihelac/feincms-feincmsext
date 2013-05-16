@@ -3,7 +3,8 @@ from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext_lazy as _
 
 from mptt.forms import TreeNodeChoiceField
-from feincms.module.page.models import Page, PageAdmin as OldPageAdmin
+from feincms.module.page.models import Page
+from feincms.module.page.modeladmins import PageAdmin as OldPageAdmin
 
 from models import PagePermission
 
