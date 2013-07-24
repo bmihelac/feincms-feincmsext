@@ -36,6 +36,8 @@ def get_navigation(start_page=None, level=0, depth=1, active_depth=0,
         queryset = queryset.filter(navigation_type=navigation_type)
     queryset = PageManager.apply_active_filters(queryset)
     entries = list(queryset)
+
+    active_node = None
     if start_page and active_depth and (start_page.level >= level):
         if start_page.level == level:
             active_node = start_page
@@ -51,6 +53,7 @@ def get_navigation(start_page=None, level=0, depth=1, active_depth=0,
             index = entries.index(active_node) + 1
             entries[index:index] = active_node.children.filter(
                     in_navigation=True).filter(level__lte=level + active_depth)
+
     if extended:
         _entries = list(entries)
         entries = []
@@ -64,11 +67,12 @@ def get_navigation(start_page=None, level=0, depth=1, active_depth=0,
         # and from all entries
         for entry in _entries:
             entries.append(entry)
+            max_depth = active_depth if active_node == entry else depth
             if getattr(entry, 'navigation_extension', None):
                 extended_entries = [p for p in entry.extended_navigation(
                     level=entry.level + 1,
                     tree_id=root_page.tree_id, lft=0, rght=0,
-                    request=request) if p.level <= root_page.level + depth]
+                    request=request) if p.level <= root_page.level + max_depth]
                 entries.extend(extended_entries)
     return entries
 
