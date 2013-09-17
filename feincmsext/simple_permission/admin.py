@@ -4,7 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from mptt.forms import TreeNodeChoiceField
 from feincms.module.page.models import Page
-from feincms.module.page.modeladmins import PageAdmin as OldPageAdmin
+try:
+    from feincms.module.page.modeladmins import PageAdmin as OldPageAdmin
+except Exception:
+    from feincms.module.page.models import PageAdmin as OldPageAdmin
 
 from models import PagePermission
 
@@ -75,7 +78,7 @@ class ObjectPermissionMixin(object):
     def _actions_column(self, page):
         """
         see #13659 http://code.djangoproject.com/ticket/13659
-        When this patch is applied we could check if user is allowed to 
+        When this patch is applied we could check if user is allowed to
         add child pages and show/hide link in respect to this.
         """
         actions = super(ObjectPermissionMixin, self)._actions_column(page)
