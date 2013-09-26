@@ -25,13 +25,18 @@ class RichTextModelMixin(object):
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra_context = self.get_richtext_context(extra_context)
-        return super(RichTextModelMixin, self).change_view(request, object_id,
-            form_url, extra_context=extra_context)
+        return super(RichTextModelMixin, self).change_view(
+            request,
+            object_id,
+            form_url=form_url,
+            extra_context=extra_context)
 
     def add_view(self, request, form_url='', extra_context=None):
         extra_context = self.get_richtext_context(extra_context)
-        return super(RichTextModelMixin, self).add_view(request,
-            form_url, extra_context=extra_context)
+        return super(RichTextModelMixin, self).add_view(
+            request,
+            form_url=form_url,
+            extra_context=extra_context)
 
 
 class RichTextModelAdmin(RichTextModelMixin, admin.ModelAdmin):
