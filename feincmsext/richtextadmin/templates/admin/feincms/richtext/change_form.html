@@ -1,6 +1,7 @@
 {% extends "admin/change_form.html" %}
 
 {% block extrahead %}{{ block.super }}
-{% include "admin/feincms/richtext/_head.html" %}
+{% include "admin/feincms/load-jquery.include" %}
+{{ init_richtext }}
 {% endblock %}
 
