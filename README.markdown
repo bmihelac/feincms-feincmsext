@@ -71,7 +71,7 @@ Menu structure file:
 	# Home
 	## Menu 1
 	### Menu 1.1
-	## Menu 2
+	## {"template_key": "inner.html"} Menu 2
 	### Menu 2.1
 
 This would delete ALL EXISTING PAGES and create structure from file:
@@ -81,6 +81,11 @@ This would delete ALL EXISTING PAGES and create structure from file:
 And this would add structure from the text file to page with id of 1:
 
 	./manage.py importstructure --root 1 menus.txt
+
+JSON options can be used to update default Page attributes.
+
+In example above both "Menu 1.1" and "Menu 2.1" have `template_key` set to  
+inner.html.
 
 simple permissions
 ------------------

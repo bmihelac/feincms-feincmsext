@@ -1,4 +1,5 @@
 import re
+import json
 
 from django.template.defaultfilters import slugify
 
@@ -12,15 +13,27 @@ def import_structure(f, root_id=None):
         parents[0] = Page.objects.get(id=root_id)
     else:
         parents[0] = None
-        
+    kwargs = {
+        'active': True,
+        'in_navigation': True,
+    }
     for line in f:
-        match = re.match(r"^(#+) (.*)$", line)
+        match = re.match(r"^(#+) (\{[^)]*} )?(.*)$", unicode(line))
         if match:
             level = len(match.group(1))
-            title = match.group(2) 
+            opts = match.group(2)
+            if opts:
+                js = json.loads(opts)
+                kwargs.update(**dict([(str(k), v) for k, v in js.items()]))
+            title = match.group(3)
             parent = parents[level-1]
             parent_page = Page.objects.get(pk=parent.pk) if parent else None
-            p = Page(active=True, title=title, slug=slugify(title), in_navigation=True, parent=parent_page)
+            p = Page(
+                title=title,
+                slug=slugify(title),
+                parent=parent_page,
+                **kwargs
+            )
             for field in ('navigation_type',):
                 if parent and parent.__dict__.get(field, None):
                     p.__dict__[field] = parent.__dict__[field]

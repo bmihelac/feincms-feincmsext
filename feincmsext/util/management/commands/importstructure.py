@@ -23,5 +23,3 @@ class Command(BaseCommand):
         from feincmsext.util.structure import import_structure
         import_structure(f, root_id)
         return
-
-                    
