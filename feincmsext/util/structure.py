@@ -34,9 +34,6 @@ def import_structure(f, root_id=None):
                 parent=parent_page,
                 **kwargs
             )
-            for field in ('navigation_type',):
-                if parent and parent.__dict__.get(field, None):
-                    p.__dict__[field] = parent.__dict__[field]
             p.save()
             parents[level] = p
             print('adding FeinCMS page: %s' % title)
